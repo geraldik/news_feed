@@ -30,12 +30,12 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
-     * Комментарий к новости
+     * Comment on the news
      */
     public final Comment COMMENT = Comment.COMMENT;
 
     /**
-     * Создаваемая новость
+     * Created news
      */
     public final Item ITEM = Item.ITEM;
 

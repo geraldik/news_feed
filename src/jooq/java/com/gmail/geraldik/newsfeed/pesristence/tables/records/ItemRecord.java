@@ -16,7 +16,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 /**
- * Создаваемая новость
+ * Created news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Record5<Integer, String, String, String, LocalDateTime> {
@@ -24,7 +24,7 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>public.item.id</code>. Идентификатор новости
+     * Setter for <code>public.item.id</code>. News id
      */
     public ItemRecord setId(Integer value) {
         set(0, value);
@@ -32,14 +32,14 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.item.id</code>. Идентификатор новости
+     * Getter for <code>public.item.id</code>. News id
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>public.item.title</code>. Заголовк новости
+     * Setter for <code>public.item.title</code>. Title of the news 
      */
     public ItemRecord setTitle(String value) {
         set(1, value);
@@ -47,14 +47,14 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.item.title</code>. Заголовк новости
+     * Getter for <code>public.item.title</code>. Title of the news 
      */
     public String getTitle() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>public.item.body</code>. Текст новости
+     * Setter for <code>public.item.body</code>. News text
      */
     public ItemRecord setBody(String value) {
         set(2, value);
@@ -62,14 +62,14 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.item.body</code>. Текст новости
+     * Getter for <code>public.item.body</code>. News text
      */
     public String getBody() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>public.item.author</code>. Автор новости
+     * Setter for <code>public.item.author</code>. News author
      */
     public ItemRecord setAuthor(String value) {
         set(3, value);
@@ -77,14 +77,14 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.item.author</code>. Автор новости
+     * Getter for <code>public.item.author</code>. News author
      */
     public String getAuthor() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>public.item.created</code>. Дата создания новости (по UTC+0)
+     * Setter for <code>public.item.created</code>. News creation date (UTC+0)
      */
     public ItemRecord setCreated(LocalDateTime value) {
         set(4, value);
@@ -92,7 +92,7 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     /**
-     * Getter for <code>public.item.created</code>. Дата создания новости
+     * Getter for <code>public.item.created</code>. News creation date (UTC+0)
      */
     public LocalDateTime getCreated() {
         return (LocalDateTime) get(4);

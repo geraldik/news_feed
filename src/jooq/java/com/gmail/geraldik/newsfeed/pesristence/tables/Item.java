@@ -29,7 +29,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * Создаваемая новость
+ * Created news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Item extends TableImpl<ItemRecord> {
@@ -50,36 +50,36 @@ public class Item extends TableImpl<ItemRecord> {
     }
 
     /**
-     * The column <code>public.item.id</code>. Идентификатор новости
+     * The column <code>public.item.id</code>. News id
      */
-    public final TableField<ItemRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "Идентификатор новости");
+    public final TableField<ItemRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "News id");
 
     /**
-     * The column <code>public.item.title</code>. Заголовк новости
+     * The column <code>public.item.title</code>. Title of the news 
      */
-    public final TableField<ItemRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.CLOB.nullable(false), this, "Заголовк новости");
+    public final TableField<ItemRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.CLOB.nullable(false), this, "Title of the news ");
 
     /**
-     * The column <code>public.item.body</code>. Текст новости
+     * The column <code>public.item.body</code>. News text
      */
-    public final TableField<ItemRecord, String> BODY = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "Текст новости");
+    public final TableField<ItemRecord, String> BODY = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "News text");
 
     /**
-     * The column <code>public.item.author</code>. Автор новости
+     * The column <code>public.item.author</code>. News author
      */
-    public final TableField<ItemRecord, String> AUTHOR = createField(DSL.name("author"), SQLDataType.CLOB.nullable(false), this, "Автор новости");
+    public final TableField<ItemRecord, String> AUTHOR = createField(DSL.name("author"), SQLDataType.CLOB.nullable(false), this, "News author");
 
     /**
-     * The column <code>public.item.created</code>. Дата создания новости
+     * The column <code>public.item.created</code>. News creation date (UTC+0)
      */
-    public final TableField<ItemRecord, LocalDateTime> CREATED = createField(DSL.name("created"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "Дата создания новости");
+    public final TableField<ItemRecord, LocalDateTime> CREATED = createField(DSL.name("created"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "News creation date (UTC+0)");
 
     private Item(Name alias, Table<ItemRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private Item(Name alias, Table<ItemRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Создаваемая новость"), TableOptions.table());
+        super(alias, null, aliased, parameters, DSL.comment("Created news"), TableOptions.table());
     }
 
     /**

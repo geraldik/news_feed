@@ -15,7 +15,7 @@ import org.jooq.impl.DAOImpl;
 
 
 /**
- * Создаваемая новость
+ * Created news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ItemDao extends DAOImpl<ItemRecord, com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item, Integer> {

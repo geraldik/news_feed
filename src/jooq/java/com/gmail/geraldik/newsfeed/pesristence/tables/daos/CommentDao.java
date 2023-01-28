@@ -14,7 +14,7 @@ import org.jooq.impl.DAOImpl;
 
 
 /**
- * Комментарий к новости
+ * Comment on the news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CommentDao extends DAOImpl<CommentRecord, com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Comment, Integer> {

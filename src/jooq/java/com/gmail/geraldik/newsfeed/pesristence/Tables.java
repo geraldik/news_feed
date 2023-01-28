@@ -15,12 +15,12 @@ import com.gmail.geraldik.newsfeed.pesristence.tables.Item;
 public class Tables {
 
     /**
-     * Комментарий к новости
+     * Comment on the news
      */
     public static final Comment COMMENT = Comment.COMMENT;
 
     /**
-     * Создаваемая новость
+     * Created news
      */
     public static final Item ITEM = Item.ITEM;
 }

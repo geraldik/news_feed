@@ -17,16 +17,16 @@ CREATE TABLE IF NOT EXISTS comment
 
 );
 
-comment on table comment is 'Комментарий к новости';
-comment on column comment.id is 'Идентификатор комментария';
-comment on column comment.commentator is 'Имя комментатора';
-comment on column comment.body is 'Текст комментария';
-comment on column comment.item_id is 'Id новости, к которой относится комментарий';
+comment on table comment is 'Comment on the news';
+comment on column comment.id is 'Comment id';
+comment on column comment.commentator is 'Commentator name';
+comment on column comment.body is 'Comment text';
+comment on column comment.item_id is 'Id of the news to which the comment belongs';
 
 
-comment on table item is 'Создаваемая новость';
-comment on column item.id is 'Идентификатор новости';
-comment on column item.title is 'Заголовк новости';
-comment on column item.body is 'Текст новости';
-comment on column item.author is 'Автор новости';
-comment on column item.created is 'Дата создания новости (по UTC+0)';
+comment on table item is 'Created news';
+comment on column item.id is 'News id';
+comment on column item.title is 'Title of the news ';
+comment on column item.body is 'News text';
+comment on column item.author is 'News author';
+comment on column item.created is 'News creation date (UTC+0)';

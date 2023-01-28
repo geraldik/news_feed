@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * Создаваемая новость
+ * Created news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Item implements Serializable {
@@ -47,14 +47,14 @@ public class Item implements Serializable {
     }
 
     /**
-     * Getter for <code>public.item.id</code>. Идентификатор новости
+     * Getter for <code>public.item.id</code>. News id
      */
     public Integer getId() {
         return this.id;
     }
 
     /**
-     * Setter for <code>public.item.id</code>. Идентификатор новости
+     * Setter for <code>public.item.id</code>. News id
      */
     public Item setId(Integer id) {
         this.id = id;
@@ -62,14 +62,14 @@ public class Item implements Serializable {
     }
 
     /**
-     * Getter for <code>public.item.title</code>. Заголовк новости
+     * Getter for <code>public.item.title</code>. Title of the news 
      */
     public String getTitle() {
         return this.title;
     }
 
     /**
-     * Setter for <code>public.item.title</code>. Заголовк новости
+     * Setter for <code>public.item.title</code>. Title of the news 
      */
     public Item setTitle(String title) {
         this.title = title;
@@ -77,14 +77,14 @@ public class Item implements Serializable {
     }
 
     /**
-     * Getter for <code>public.item.body</code>. Текст новости
+     * Getter for <code>public.item.body</code>. News text
      */
     public String getBody() {
         return this.body;
     }
 
     /**
-     * Setter for <code>public.item.body</code>. Текст новости
+     * Setter for <code>public.item.body</code>. News text
      */
     public Item setBody(String body) {
         this.body = body;
@@ -92,14 +92,14 @@ public class Item implements Serializable {
     }
 
     /**
-     * Getter for <code>public.item.author</code>. Автор новости
+     * Getter for <code>public.item.author</code>. News author
      */
     public String getAuthor() {
         return this.author;
     }
 
     /**
-     * Setter for <code>public.item.author</code>. Автор новости
+     * Setter for <code>public.item.author</code>. News author
      */
     public Item setAuthor(String author) {
         this.author = author;
@@ -107,14 +107,14 @@ public class Item implements Serializable {
     }
 
     /**
-     * Getter for <code>public.item.created</code>. Дата создания новости
+     * Getter for <code>public.item.created</code>. News creation date (UTC+0)
      */
     public LocalDateTime getCreated() {
         return this.created;
     }
 
     /**
-     * Setter for <code>public.item.created</code>. Дата создания новости
+     * Setter for <code>public.item.created</code>. News creation date (UTC+0)
      */
     public Item setCreated(LocalDateTime created) {
         this.created = created;
