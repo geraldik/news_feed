@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 /**
- * Комментарий к новости
+ * Comment on the news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Comment implements Serializable {
@@ -42,14 +42,14 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Getter for <code>public.comment.id</code>. Идентификатор комментария
+     * Getter for <code>public.comment.id</code>. Comment id
      */
     public Integer getId() {
         return this.id;
     }
 
     /**
-     * Setter for <code>public.comment.id</code>. Идентификатор комментария
+     * Setter for <code>public.comment.id</code>. Comment id
      */
     public Comment setId(Integer id) {
         this.id = id;
@@ -57,14 +57,14 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Getter for <code>public.comment.commentator</code>. Имя комментатора
+     * Getter for <code>public.comment.commentator</code>. Commentator name
      */
     public String getCommentator() {
         return this.commentator;
     }
 
     /**
-     * Setter for <code>public.comment.commentator</code>. Имя комментатора
+     * Setter for <code>public.comment.commentator</code>. Commentator name
      */
     public Comment setCommentator(String commentator) {
         this.commentator = commentator;
@@ -72,14 +72,14 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Getter for <code>public.comment.body</code>. Текст комментария
+     * Getter for <code>public.comment.body</code>. Comment text
      */
     public String getBody() {
         return this.body;
     }
 
     /**
-     * Setter for <code>public.comment.body</code>. Текст комментария
+     * Setter for <code>public.comment.body</code>. Comment text
      */
     public Comment setBody(String body) {
         this.body = body;
@@ -87,14 +87,14 @@ public class Comment implements Serializable {
     }
 
     /**
-     * Getter for <code>public.comment.item_id</code>. Id новости, к которой относится комментарий
+     * Getter for <code>public.comment.item_id</code>. Id of the news to which the comment belongs
      */
     public Integer getItemId() {
         return this.itemId;
     }
 
     /**
-     * Setter for <code>public.comment.item_id</code>. Id новости, к которой относится комментарий
+     * Setter for <code>public.comment.item_id</code>. Id of the news to which the comment belongs
      */
     public Comment setItemId(Integer itemId) {
         this.itemId = itemId;

@@ -28,7 +28,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * Комментарий к новости
+ * Comment on the news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Comment extends TableImpl<CommentRecord> {
@@ -49,31 +49,31 @@ public class Comment extends TableImpl<CommentRecord> {
     }
 
     /**
-     * The column <code>public.comment.id</code>. Идентификатор комментария
+     * The column <code>public.comment.id</code>. Comment id
      */
-    public final TableField<CommentRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "Идентификатор комментария");
+    public final TableField<CommentRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "Comment id");
 
     /**
-     * The column <code>public.comment.commentator</code>. Имя комментатора
+     * The column <code>public.comment.commentator</code>. Commentator name
      */
-    public final TableField<CommentRecord, String> COMMENTATOR = createField(DSL.name("commentator"), SQLDataType.CLOB.nullable(false), this, "Имя комментатора");
+    public final TableField<CommentRecord, String> COMMENTATOR = createField(DSL.name("commentator"), SQLDataType.CLOB.nullable(false), this, "Commentator name");
 
     /**
-     * The column <code>public.comment.body</code>. Текст комментария
+     * The column <code>public.comment.body</code>. Comment text
      */
-    public final TableField<CommentRecord, String> BODY = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "Текст комментария");
+    public final TableField<CommentRecord, String> BODY = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "Comment text");
 
     /**
-     * The column <code>public.comment.item_id</code>. Id новости, к которой относится комментарий
+     * The column <code>public.comment.item_id</code>. Id of the news to which the comment belongs
      */
-    public final TableField<CommentRecord, Integer> ITEM_ID = createField(DSL.name("item_id"), SQLDataType.INTEGER, this, "Id новости, к которой относится комментарий");
+    public final TableField<CommentRecord, Integer> ITEM_ID = createField(DSL.name("item_id"), SQLDataType.INTEGER, this, "Id of the news to which the comment belongs");
 
     private Comment(Name alias, Table<CommentRecord> aliased) {
         this(alias, aliased, null);
     }
 
     private Comment(Name alias, Table<CommentRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Комментарий к новости"), TableOptions.table());
+        super(alias, null, aliased, parameters, DSL.comment("Comment on the news"), TableOptions.table());
     }
 
     /**

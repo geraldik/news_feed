@@ -14,7 +14,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 
 /**
- * Комментарий к новости
+ * Comment on the news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements Record4<Integer, String, String, Integer> {
@@ -22,7 +22,7 @@ public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>public.comment.id</code>. Идентификатор комментария
+     * Setter for <code>public.comment.id</code>. Comment id
      */
     public CommentRecord setId(Integer value) {
         set(0, value);
@@ -30,14 +30,14 @@ public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements
     }
 
     /**
-     * Getter for <code>public.comment.id</code>. Идентификатор комментария
+     * Getter for <code>public.comment.id</code>. Comment id
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>public.comment.commentator</code>. Имя комментатора
+     * Setter for <code>public.comment.commentator</code>. Commentator name
      */
     public CommentRecord setCommentator(String value) {
         set(1, value);
@@ -45,14 +45,14 @@ public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements
     }
 
     /**
-     * Getter for <code>public.comment.commentator</code>. Имя комментатора
+     * Getter for <code>public.comment.commentator</code>. Commentator name
      */
     public String getCommentator() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>public.comment.body</code>. Текст комментария
+     * Setter for <code>public.comment.body</code>. Comment text
      */
     public CommentRecord setBody(String value) {
         set(2, value);
@@ -60,14 +60,14 @@ public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements
     }
 
     /**
-     * Getter for <code>public.comment.body</code>. Текст комментария
+     * Getter for <code>public.comment.body</code>. Comment text
      */
     public String getBody() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>public.comment.item_id</code>. Id новости, к которой относится комментарий
+     * Setter for <code>public.comment.item_id</code>. Id of the news to which the comment belongs
      */
     public CommentRecord setItemId(Integer value) {
         set(3, value);
@@ -75,7 +75,7 @@ public class CommentRecord extends UpdatableRecordImpl<CommentRecord> implements
     }
 
     /**
-     * Getter for <code>public.comment.item_id</code>. Id новости, к которой относится комментарий
+     * Getter for <code>public.comment.item_id</code>. Id of the news to which the comment belongs
      */
     public Integer getItemId() {
         return (Integer) get(3);
