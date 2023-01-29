@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
@@ -33,5 +34,16 @@ public class ItemRepository {
                 .returning(ITEM.ID)
                 .fetchOne()
                 .getValue(ITEM.ID);
+    }
+
+    public boolean update(Item item) {
+        System.out.println(dsl.configuration().dialect().getName());
+        return dsl.update(ITEM)
+                .set(ITEM.TITLE, item.getTitle())
+                .set(ITEM.BODY, item.getBody())
+                .set(ITEM.AUTHOR, item.getAuthor())
+                .set(ITEM.CREATED, LocalDateTime.now(ZoneOffset.UTC))
+                .where(ITEM.ID.eq(item.getId()))
+                .execute() > 0;
     }
 }

@@ -1,7 +1,8 @@
-package com.gmail.geraldik.newsfeed;
+package com.gmail.geraldik.newsfeed.controller;
 
 import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
+import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
 import com.gmail.geraldik.newsfeed.service.ItemService;
 import com.gmail.geraldik.newsfeed.utils.UriConsts;
 import jakarta.validation.Valid;
@@ -27,8 +28,12 @@ public class ItemController {
         );
     }
 
-    @GetMapping()
-    public ResponseEntity<Void> test(){
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping()
+    public ResponseEntity<ItemShortResponse> updateItem(@RequestBody ItemUpdateRequest itemUpdateRequest) {
+        var itemShortResponse = service.update(itemUpdateRequest);
+        return new ResponseEntity<>(
+                itemShortResponse,
+                HttpStatus.OK
+        );
     }
 }

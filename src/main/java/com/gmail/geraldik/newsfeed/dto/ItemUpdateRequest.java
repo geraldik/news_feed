@@ -5,14 +5,15 @@ import lombok.Data;
 
 
 /**
- * This class defines the returning object for the request to save item
-*/
+ * This class defines the object included in the update request
+ */
 @Data
-public class ItemShortResponse {
+public class ItemUpdateRequest {
 
-    @NotEmpty(message = "Id should not be empty")
     private int id;
+    @NotEmpty(message = "The title should not be empty")
     private String title;
+    @NotEmpty(message = "The body should not be empty")
     private String body;
     private String author;
 
