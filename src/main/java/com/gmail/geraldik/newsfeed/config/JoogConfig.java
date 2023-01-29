@@ -18,8 +18,8 @@ public class JoogConfig {
 
     @Bean
     public DataSourceConnectionProvider connectionProvider() {
-        return new DataSourceConnectionProvider
-                (new TransactionAwareDataSourceProxy(dataSource));
+        return new DataSourceConnectionProvider(
+                new TransactionAwareDataSourceProxy(dataSource));
     }
 
     public DefaultConfiguration configuration() {

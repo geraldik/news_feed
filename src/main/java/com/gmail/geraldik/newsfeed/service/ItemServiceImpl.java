@@ -15,10 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository repository;
     private final ItemMapper mapper;
@@ -39,7 +38,7 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public ItemShortResponse update(ItemUpdateRequest itemUpdateRequest) {
         var item = mapper.toUpdateEntity(itemUpdateRequest);
-        if(!repository.update(item)) {
+        if (!repository.update(item)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("Item with id = %d not found", item.getId()));
         }
