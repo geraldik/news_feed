@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class ItemUpdateRequest {
 
+    @NotEmpty(message = "The id should not be empty")
     private int id;
     @NotEmpty(message = "The title should not be empty")
     private String title;
