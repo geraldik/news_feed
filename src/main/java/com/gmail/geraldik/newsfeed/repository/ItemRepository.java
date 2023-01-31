@@ -1,13 +1,14 @@
 package com.gmail.geraldik.newsfeed.repository;
 
+import static com.gmail.geraldik.newsfeed.pesristence.Tables.COMMENT;
 import static com.gmail.geraldik.newsfeed.pesristence.Tables.ITEM;
+import static org.jooq.impl.DSL.count;
 
 import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
+import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.jooq.OrderField;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class ItemRepository {
 
     private final DSLContext dsl;
 
-    public Integer insert(Item item) {
+    public Integer insertOne(Item item) {
         return dsl.insertInto(
                         ITEM,
                         ITEM.TITLE,
@@ -39,7 +40,7 @@ public class ItemRepository {
                 .getValue(ITEM.ID);
     }
 
-    public boolean update(Item item) {
+    public boolean updateOne(Item item) {
         System.out.println(dsl.configuration().dialect().getName());
         return dsl.update(ITEM)
                 .set(ITEM.TITLE, item.getTitle())
@@ -50,12 +51,40 @@ public class ItemRepository {
                 .execute() > 0;
     }
 
-    public Page<Item> findPaginated(Pageable pageable) {
-        List<Item> content = dsl.selectFrom(ITEM)
-                .offset(pageable.getPageSize() * pageable.getPageNumber())
-                .limit(pageable.getPageSize())
-                .fetchInto(Item.class);
-        int total = dsl.fetchCount(ITEM);
-        return new PageImpl<>(content, pageable, total);
+    public List<ItemWithCommentNum> findAllWithLimitAndOffset(int page, int size) {
+        return dsl.select(
+                        ITEM.ID,
+                        ITEM.TITLE,
+                        ITEM.BODY,
+                        ITEM.AUTHOR,
+                        count(COMMENT.ID).as("comment_num"))
+                .from(ITEM.leftJoin(COMMENT)
+                        .on(ITEM.ID.eq(COMMENT.ID)))
+                .groupBy(ITEM.ID)
+                .offset(size * page)
+                .limit(size)
+                .fetchInto(ItemWithCommentNum.class);
+    }
+
+    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSort(int page, int size, OrderField[] orders) {
+        return dsl.select(
+                        ITEM.ID,
+                        ITEM.TITLE,
+                        ITEM.BODY,
+                        ITEM.AUTHOR,
+                        count(COMMENT.ID).as("comment_num"))
+                .from(ITEM.leftJoin(COMMENT)
+                        .on(ITEM.ID.eq(COMMENT.ID)))
+                .groupBy(ITEM.ID)
+                .orderBy(orders)
+                .offset(size * page)
+                .limit(size)
+                .fetchInto(ItemWithCommentNum.class);
+    }
+
+    public int countAllItem() {
+        return dsl.selectCount()
+                .from(ITEM)
+                .fetchOne(0, int.class);
     }
 }
