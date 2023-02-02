@@ -2,8 +2,10 @@ package com.gmail.geraldik.newsfeed.mapper;
 
 import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
+import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
 import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
+import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,15 +47,16 @@ public class ItemMapper {
     }
 
     /**
-     * Convert POJO Item to a short version
+     * Convert POJO Item with commentaries number to a short version
      */
-    public ItemShortResponse toItemShortResponse(Item item) {
-        var shortDto = new ItemShortResponse();
-        shortDto.setId(item.getId());
-        shortDto.setTitle(item.getTitle());
-        shortDto.setBody(cutTheBody(item.getBody()));
-        shortDto.setAuthor(item.getAuthor());
-        return shortDto;
+    public ItemShortWithCommentNum toItemShortCommentNumResponse(ItemWithCommentNum item) {
+        var shortCommentNumDto = new ItemShortWithCommentNum();
+        shortCommentNumDto.setId(item.getId());
+        shortCommentNumDto.setTitle(item.getTitle());
+        shortCommentNumDto.setBody(cutTheBody(item.getBody()));
+        shortCommentNumDto.setAuthor(item.getAuthor());
+        shortCommentNumDto.setCommentNum(item.getCommentNum());
+        return shortCommentNumDto;
     }
 
     /**

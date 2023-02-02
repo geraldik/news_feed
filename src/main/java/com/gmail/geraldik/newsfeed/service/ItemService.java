@@ -2,10 +2,10 @@ package com.gmail.geraldik.newsfeed.service;
 
 import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
+import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
-import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.gmail.geraldik.newsfeed.page.SimplePage;
+import org.springframework.data.domain.Sort;
 
 /**
  * Defines a service layer of items
@@ -17,5 +17,5 @@ public interface ItemService {
 
     ItemShortResponse update(ItemUpdateRequest itemUpdateRequest);
 
-     Page<ItemWithCommentNum> findPaginated(Pageable pageable);
+    SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort);
 }

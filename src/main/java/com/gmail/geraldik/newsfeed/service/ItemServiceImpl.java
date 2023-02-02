@@ -2,17 +2,16 @@ package com.gmail.geraldik.newsfeed.service;
 
 import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
+import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
 import com.gmail.geraldik.newsfeed.mapper.ItemMapper;
+import com.gmail.geraldik.newsfeed.page.SimplePage;
 import com.gmail.geraldik.newsfeed.pesristence.tables.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import com.gmail.geraldik.newsfeed.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Field;
 import org.jooq.OrderField;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -54,17 +53,33 @@ public class ItemServiceImpl implements ItemService {
         return mapper.toItemShortResponse(itemUpdateRequest);
     }
 
+    /**
+     * Find Item in DB with pagination and sorting
+     */
     @Override
-    public Page<ItemWithCommentNum> findPaginated(Pageable pageable) {
-        OrderField<?>[] orderFields = pageAbleToOrderFields(pageable);
-        var items = repository.findAllWithLimitAndOffsetAndSort(
-                pageable.getPageNumber(), pageable.getPageSize(), orderFields);
+    public SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort) {
         int itemsCount = repository.countAllItem();
-        return new PageImpl<>(items, pageable, itemsCount);
+        if (itemsCount < page * size) {
+            page = itemsCount / size;
+        }
+        OrderField<?>[] orderFields = toOrderField(sort);
+        List<ItemWithCommentNum> items = repository.findAllWithLimitAndOffsetAndSort(
+                page, size, orderFields);
+        var shortItems = items.stream()
+                .map(mapper::toItemShortCommentNumResponse)
+                .toList();
+        return new SimplePage<>(shortItems, sort, itemsCount, page, size);
     }
 
-    private OrderField<?>[] pageAbleToOrderFields(Pageable pageable) {
-        Sort sort = pageable.getSort();
+    /**
+     * Create OrderField[] from incoming Sort object.
+     * Returns default sorting created.desc
+     * when there is now parameters of sorting.
+     */
+    private OrderField<?>[] toOrderField(Sort sort) {
+        if (sort.isUnsorted()) {
+            return new OrderField[]{Item.ITEM.field("created").desc()};
+        }
         List<Field<?>> sortFields = sort.stream()
                 .map(o -> field(o.getProperty()))
                 .collect(Collectors.toList());
@@ -74,8 +89,9 @@ public class ItemServiceImpl implements ItemService {
         while (iterator.hasNext()) {
             var order = iterator.next();
             String property = order.getProperty();
-            OrderField<?> orderField = order.isAscending() ?
-                    Item.ITEM.field(property).asc() : Item.ITEM.field(property).desc();
+            OrderField<?> orderField = order.isAscending()
+                    ? Item.ITEM.field(property).asc()
+                    : Item.ITEM.field(property).desc();
             orders[i++] = orderField;
         }
         return orders;

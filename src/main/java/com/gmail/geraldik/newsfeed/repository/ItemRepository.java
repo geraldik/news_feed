@@ -51,21 +51,6 @@ public class ItemRepository {
                 .execute() > 0;
     }
 
-    public List<ItemWithCommentNum> findAllWithLimitAndOffset(int page, int size) {
-        return dsl.select(
-                        ITEM.ID,
-                        ITEM.TITLE,
-                        ITEM.BODY,
-                        ITEM.AUTHOR,
-                        count(COMMENT.ID).as("comment_num"))
-                .from(ITEM.leftJoin(COMMENT)
-                        .on(ITEM.ID.eq(COMMENT.ID)))
-                .groupBy(ITEM.ID)
-                .offset(size * page)
-                .limit(size)
-                .fetchInto(ItemWithCommentNum.class);
-    }
-
     public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSort(int page, int size, OrderField[] orders) {
         return dsl.select(
                         ITEM.ID,

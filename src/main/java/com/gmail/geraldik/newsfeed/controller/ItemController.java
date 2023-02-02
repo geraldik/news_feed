@@ -2,15 +2,13 @@ package com.gmail.geraldik.newsfeed.controller;
 
 import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
+import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
-import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
+import com.gmail.geraldik.newsfeed.page.SimplePage;
 import com.gmail.geraldik.newsfeed.service.ItemService;
 import com.gmail.geraldik.newsfeed.utils.UriConsts;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,19 +41,12 @@ public class ItemController {
         );
     }
 
-    @GetMapping(params = {"page", "size"})
-    public ResponseEntity<Page<ItemWithCommentNum>> getItems(@RequestParam("page") int page,
-                                                             @RequestParam("size") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "title"));
-        var resultPage = service.findPaginated(pageable);
-        return new ResponseEntity<>(
-                resultPage,
-                HttpStatus.OK);
-    }
-
-    @GetMapping(params = {"page", "size", "sort"})
-    public ResponseEntity<Page<ItemWithCommentNum>> getItems(Pageable pageable) {
-        var resultPage = service.findPaginated(pageable);
+    @GetMapping()
+    public ResponseEntity<SimplePage<ItemShortWithCommentNum>> getItems(
+            @RequestParam (value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam (value = "size", required = false, defaultValue = "10") int size,
+            Sort sort) {
+        var resultPage = service.findPaginated(page, size, sort);
         return new ResponseEntity<>(
                 resultPage,
                 HttpStatus.OK);
