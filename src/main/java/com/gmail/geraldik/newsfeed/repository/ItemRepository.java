@@ -7,6 +7,7 @@ import static org.jooq.impl.DSL.count;
 import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import lombok.RequiredArgsConstructor;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.OrderField;
 import org.springframework.stereotype.Repository;
@@ -51,7 +52,9 @@ public class ItemRepository {
                 .execute() > 0;
     }
 
-    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSort(int page, int size, OrderField[] orders) {
+    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSortAndFilter(
+            int page, int size, OrderField[] orders,
+            List<Condition> whereConditions, List<Condition> havingConditions) {
         return dsl.select(
                         ITEM.ID,
                         ITEM.TITLE,
@@ -59,8 +62,10 @@ public class ItemRepository {
                         ITEM.AUTHOR,
                         count(COMMENT.ID).as("comment_num"))
                 .from(ITEM.leftJoin(COMMENT)
-                        .on(ITEM.ID.eq(COMMENT.ID)))
+                        .on(ITEM.ID.eq(COMMENT.ITEM_ID)))
+                .where(whereConditions)
                 .groupBy(ITEM.ID)
+                .having(havingConditions)
                 .orderBy(orders)
                 .offset(size * page)
                 .limit(size)

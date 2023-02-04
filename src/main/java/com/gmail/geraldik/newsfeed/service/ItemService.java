@@ -4,6 +4,7 @@ import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
 import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
+import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.page.SimplePage;
 import org.springframework.data.domain.Sort;
 
@@ -17,5 +18,5 @@ public interface ItemService {
 
     ItemShortResponse update(ItemUpdateRequest itemUpdateRequest);
 
-    SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort);
+    SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort, ItemPageFilter filter);
 }

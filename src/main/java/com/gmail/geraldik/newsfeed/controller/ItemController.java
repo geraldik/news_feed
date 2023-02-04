@@ -4,6 +4,7 @@ import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
 import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
+import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.page.SimplePage;
 import com.gmail.geraldik.newsfeed.service.ItemService;
 import com.gmail.geraldik.newsfeed.utils.UriConsts;
@@ -45,8 +46,9 @@ public class ItemController {
     public ResponseEntity<SimplePage<ItemShortWithCommentNum>> getItems(
             @RequestParam (value = "page", required = false, defaultValue = "0") int page,
             @RequestParam (value = "size", required = false, defaultValue = "10") int size,
-            Sort sort) {
-        var resultPage = service.findPaginated(page, size, sort);
+            Sort sort,
+            ItemPageFilter filter) {
+        var resultPage = service.findPaginated(page, size, sort, filter);
         return new ResponseEntity<>(
                 resultPage,
                 HttpStatus.OK);
