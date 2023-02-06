@@ -4,6 +4,7 @@ import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.SortField;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Sort;
@@ -103,10 +104,16 @@ public class ItemRepository {
         return fields.isEmpty() ? DEF_SORT : fields;
     }
 
+    /**
+     * Creates a sort field based on the specified property and sort order.
+     * @param isAscending Specifies the sort order. Set to `true` for ascending, and `false` for descending.
+     * @param property Specifies the property to sort by.
+     * @return A sort field based on the specified property and sort order.
+     */
     private SortField<?> ascOrDesc(boolean isAscending, String property) {
-        if (property.equals(COMMENT_NUM)) {
-            return isAscending ? DSL.field(COMMENT_NUM_DB).asc() : DSL.field(COMMENT_NUM_DB).desc();
-        }
-        return isAscending ? ITEM.field(property).asc() : ITEM.field(property).desc();
+        Field<?> field = property.equals(COMMENT_NUM)
+                ? DSL.field(COMMENT_NUM_DB)
+                : ITEM.field(property);
+        return isAscending ? field.asc() : field.desc();
     }
 }
