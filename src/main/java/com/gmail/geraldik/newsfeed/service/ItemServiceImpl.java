@@ -11,17 +11,13 @@ import com.gmail.geraldik.newsfeed.pesristence.tables.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import com.gmail.geraldik.newsfeed.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.OrderField;
-import org.jooq.impl.DSL;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,11 +73,9 @@ public class ItemServiceImpl implements ItemService {
         if (itemsCount < page * size) {
             page = itemsCount / size;
         }
-        List<Condition> whereConditions = forWhereClause(filter);
-        List<Condition> havingConditions = forHavingClause(filter);
         OrderField<?>[] orderFields = toOrderField(sort);
         List<ItemWithCommentNum> items = repository.findAllWithLimitAndOffsetAndSortAndFilter(
-                page, size, orderFields, whereConditions, havingConditions);
+                page, size, orderFields, filter);
         var shortItems = items.stream()
                 .map(mapper::toItemShortCommentNumResponse)
                 .toList();
@@ -114,54 +108,5 @@ public class ItemServiceImpl implements ItemService {
             orders[i++] = orderField;
         }
         return orders;
-    }
-
-    /**
-
-     This method returns a list of conditions for filtering item records using the non-null fields of
-     the {@link ItemPageFilter} object.
-     The returned conditions can be used in the WHERE clause of a SQL query.
-     @param filter the {@link ItemPageFilter} object used to determine the conditions for filtering the item records
-     @return a list of conditions for filtering the item records based on the non-null properties of the
-     {@link ItemPageFilter} object
-     */
-    private List<Condition> forWhereClause(ItemPageFilter filter) {
-        List<Condition> conditions = new ArrayList<>();
-        if (filter.getAuthor() != null) {
-            conditions.add(DSL.field("author").eq(filter.getAuthor()));
-        }
-        if (filter.getCreatedFrom() != null) {
-            conditions.add(DSL.field("created")
-                    .greaterOrEqual(new Timestamp(filter.getCreatedFrom())));
-        }
-        if (filter.getCreatedTo() != null) {
-            conditions.add(DSL.field("created")
-                    .lessOrEqual(new Timestamp(filter.getCreatedFrom())));
-        }
-        return conditions;
-    }
-
-    /**
-     This method returns a list of conditions for the HAVING clause using the non-null fields of the
-     {@link ItemPageFilter} object.
-     The conditions are created based on the number of comments for each item, using the 'count'
-     function and the 'id' field
-     of the 'comment' table.
-     @param filter ItemPageFilter object that contains the values to be used in the conditions
-     @return a list of conditions for the HAVING clause
-     */
-    private List<Condition> forHavingClause(ItemPageFilter filter) {
-        List<Condition> conditions = new ArrayList<>();
-        if (filter.getCommentNumFrom() != null) {
-            conditions.add(DSL.field(
-                            "count(\"public\".\"comment\".\"id\")")
-                    .greaterOrEqual(filter.getCommentNumFrom()));
-        }
-        if (filter.getCommentNumTo() != null) {
-            conditions.add(DSL.field(
-                            "count(\"public\".\"comment\".\"id\")")
-                    .lessOrEqual(filter.getCommentNumTo()));
-        }
-        return conditions;
     }
 }
