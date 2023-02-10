@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class UriConsts {
 
-    public static final String API = "/api/vi";
+    public static final String API = "/api/v1";
     public static final String NEWS = "/news";
 
 }
