@@ -15,11 +15,10 @@ public class ItemMapper {
      * Convert entering Item to be saved to a POJO version
      */
     public Item toEntity(ItemSaveRequest itemSaveRequest) {
-        Item item = new Item();
-        item.setTitle(itemSaveRequest.getTitle());
-        item.setBody(itemSaveRequest.getBody());
-        item.setAuthor(itemSaveRequest.getAuthor());
-        return item;
+        return new Item()
+                .setTitle(itemSaveRequest.getTitle())
+                .setBody(itemSaveRequest.getBody())
+                .setAuthor(itemSaveRequest.getAuthor());
     }
 
     /**
@@ -27,10 +26,10 @@ public class ItemMapper {
      */
     public ItemShortResponse toItemShortResponse(ItemSaveRequest itemSaveRequest, int id) {
         var shortDto = new ItemShortResponse();
-        shortDto.setId(id);
-        shortDto.setTitle(itemSaveRequest.getTitle());
-        shortDto.setBody(cutTheBody(itemSaveRequest.getBody()));
-        shortDto.setAuthor(itemSaveRequest.getAuthor());
+        shortDto.setId(id)
+                .setTitle(itemSaveRequest.getTitle())
+                .setBody(cutTheBody(itemSaveRequest.getBody()))
+                .setAuthor(itemSaveRequest.getAuthor());
         return shortDto;
     }
 
@@ -38,41 +37,38 @@ public class ItemMapper {
      * Convert entering Item to be updated to a short version
      */
     public ItemShortResponse toItemShortResponse(ItemUpdateRequest itemUpdateRequest) {
-        var shortDto = new ItemShortResponse();
-        shortDto.setId(itemUpdateRequest.getId());
-        shortDto.setTitle(itemUpdateRequest.getTitle());
-        shortDto.setBody(cutTheBody(itemUpdateRequest.getBody()));
-        shortDto.setAuthor(itemUpdateRequest.getAuthor());
-        return shortDto;
+        return new ItemShortResponse()
+                .setId(itemUpdateRequest.getId())
+                .setTitle(itemUpdateRequest.getTitle())
+                .setBody(cutTheBody(itemUpdateRequest.getBody()))
+                .setAuthor(itemUpdateRequest.getAuthor());
     }
 
     /**
      * Convert POJO Item with commentaries number to a short version
      */
     public ItemShortWithCommentNum toItemShortCommentNumResponse(ItemWithCommentNum item) {
-        var shortCommentNumDto = new ItemShortWithCommentNum();
-        shortCommentNumDto.setId(item.getId());
-        shortCommentNumDto.setTitle(item.getTitle());
-        shortCommentNumDto.setBody(cutTheBody(item.getBody()));
-        shortCommentNumDto.setAuthor(item.getAuthor());
-        shortCommentNumDto.setCommentNum(item.getCommentNum());
-        return shortCommentNumDto;
+        return new ItemShortWithCommentNum()
+                .setId(item.getId())
+                .setTitle(item.getTitle())
+                .setBody(cutTheBody(item.getBody()))
+                .setAuthor(item.getAuthor())
+                .setCommentNum(item.getCommentNum());
     }
 
     /**
      * Convert entering Item to be updated to a short version
      */
     public Item toUpdateEntity(ItemUpdateRequest itemUpdateRequest) {
-        Item item = new Item();
-        item.setId(itemUpdateRequest.getId());
-        item.setTitle(itemUpdateRequest.getTitle());
-        item.setBody(itemUpdateRequest.getBody());
-        item.setAuthor(itemUpdateRequest.getAuthor());
-        return item;
+        return new Item()
+                .setId(itemUpdateRequest.getId())
+                .setTitle(itemUpdateRequest.getTitle())
+                .setBody(itemUpdateRequest.getBody())
+                .setAuthor(itemUpdateRequest.getAuthor());
     }
 
     /**
-     *Cutting text of item to a short version
+     * Cutting text of item to a short version
      */
     private String cutTheBody(String body) {
         return body.length() > 50 ? body.substring(0, 50) : body;

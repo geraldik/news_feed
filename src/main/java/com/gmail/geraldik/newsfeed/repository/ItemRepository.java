@@ -1,31 +1,35 @@
 package com.gmail.geraldik.newsfeed.repository;
 
-import static com.gmail.geraldik.newsfeed.pesristence.Tables.COMMENT;
-import static com.gmail.geraldik.newsfeed.pesristence.Tables.ITEM;
-import static org.jooq.impl.DSL.count;
-
-import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
 import lombok.RequiredArgsConstructor;
-import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.OrderField;
+import org.jooq.Field;
+import org.jooq.SortField;
 import org.jooq.impl.DSL;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.Set;
+
+import static com.gmail.geraldik.newsfeed.pesristence.Tables.COMMENT;
+import static com.gmail.geraldik.newsfeed.pesristence.Tables.ITEM;
+import static org.jooq.impl.DSL.count;
 
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
 
-    private static final String COUNT_PUBLIC_COMMENT_ID = "count(\"public\".\"comment\".\"id\")";
+    private final static List<? extends SortField<?>> DEF_SORT =
+            List.of(ITEM.field("created").desc());
+    private final static Set<String> FIELDS = Set.of(
+            "author", "created", "title", "commentNum");
+    private static final String COMMENT_NUM = "commentNum";
+    private static final String COMMENT_NUM_DB = "comment_num";
+
     private final DSLContext dsl;
 
     public Integer insertOne(Item item) {
@@ -58,22 +62,18 @@ public class ItemRepository {
                 .execute() > 0;
     }
 
-    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSortAndFilter(
-            int page, int size, OrderField[] orders, ItemPageFilter filter) {
-        List<Condition> whereConditions = forWhereClause(filter);
-        List<Condition> havingConditions = forHavingClause(filter);
+    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSort(int page, int size, Sort sort) {
+        var sortFields = toSortField(sort);
         return dsl.select(
                         ITEM.ID,
                         ITEM.TITLE,
                         ITEM.BODY,
                         ITEM.AUTHOR,
-                        count(COMMENT.ID))
+                        count(COMMENT.ID).as("comment_num"))
                 .from(ITEM.leftJoin(COMMENT)
                         .on(ITEM.ID.eq(COMMENT.ITEM_ID)))
-                .where(whereConditions)
                 .groupBy(ITEM.ID)
-                .having(havingConditions)
-                .orderBy(orders)
+                .orderBy(sortFields)
                 .offset(size * page)
                 .limit(size)
                 .fetchInto(ItemWithCommentNum.class);
@@ -86,48 +86,34 @@ public class ItemRepository {
     }
 
     /**
-     * This method returns a list of conditions for filtering item records using the non-null fields of
-     * the {@link ItemPageFilter} object.
-     * The returned conditions can be used in the WHERE clause of a SQL query.
-     *
-     * @param filter the {@link ItemPageFilter} object used to determine the conditions for filtering the item records
-     * @return a list of conditions for filtering the item records based on the non-null properties of the
-     * {@link ItemPageFilter} object
+     * Converts the given `Sort` object to a list of `SortField` objects.
+     * If the `Sort` object is unsorted, the method returns a default sort list.
+     * If the `Sort` object contains properties not in the allowed fields list, they are filtered out.
+     * The remaining properties are sorted according to the ascending or descending order specified in the `Sort` object.
+     * @param sort the `Sort` object to be converted
+     * @return a list of `SortField` objects based on the given `Sort` object
      */
-    private List<Condition> forWhereClause(ItemPageFilter filter) {
-        return Stream.of(
-                        Optional.ofNullable(filter.getAuthor())
-                                .map(author -> DSL.field("author")
-                                        .eq(author)),
-                        Optional.ofNullable(filter.getCreatedFrom())
-                                .map(createdFrom -> DSL.field("created")
-                                        .greaterOrEqual(new Timestamp(createdFrom))),
-                        Optional.ofNullable(filter.getCreatedTo())
-                                .map(createdTo -> DSL.field("created")
-                                        .lessOrEqual(new Timestamp(createdTo))))
-                .flatMap(Optional::stream)
+    private List<? extends SortField<?>> toSortField(Sort sort) {
+        if (sort.isUnsorted()) {
+            return DEF_SORT;
+        }
+        var fields = sort.stream()
+                .filter(order -> FIELDS.contains(order.getProperty()))
+                .map(order -> ascOrDesc(order.isAscending(), order.getProperty()))
                 .toList();
+        return fields.isEmpty() ? DEF_SORT : fields;
     }
 
     /**
-     * This method returns a list of conditions for the HAVING clause using the non-null fields of the
-     * {@link ItemPageFilter} object.
-     * The conditions are created based on the number of comments for each item, using the 'count'
-     * function and the 'id' field
-     * of the 'comment' table.
-     *
-     * @param filter ItemPageFilter object that contains the values to be used in the conditions
-     * @return a list of conditions for the HAVING clause
+     * Creates a sort field based on the specified property and sort order.
+     * @param isAscending Specifies the sort order. Set to `true` for ascending, and `false` for descending.
+     * @param property Specifies the property to sort by.
+     * @return A sort field based on the specified property and sort order.
      */
-    private List<Condition> forHavingClause(ItemPageFilter filter) {
-        return Stream.of(
-                        Optional.ofNullable(filter.getCommentNumFrom())
-                                .map(author -> DSL.field(COUNT_PUBLIC_COMMENT_ID)
-                                        .greaterOrEqual(filter.getCommentNumFrom())),
-                        Optional.ofNullable(filter.getCommentNumTo())
-                                .map(author -> DSL.field(COUNT_PUBLIC_COMMENT_ID)
-                                        .lessOrEqual((filter.getCommentNumTo()))))
-                .flatMap(Optional::stream)
-                .toList();
+    private SortField<?> ascOrDesc(boolean isAscending, String property) {
+        Field<?> field = property.equals(COMMENT_NUM)
+                ? DSL.field(COMMENT_NUM_DB)
+                : ITEM.field(property);
+        return isAscending ? field.asc() : field.desc();
     }
 }
