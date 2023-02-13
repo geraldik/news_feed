@@ -1,5 +1,6 @@
 package com.gmail.geraldik.newsfeed.config;
 
+import com.gmail.geraldik.newsfeed.pesristence.tables.daos.CommentDao;
 import com.gmail.geraldik.newsfeed.pesristence.tables.daos.ItemDao;
 import lombok.RequiredArgsConstructor;
 import org.jooq.SQLDialect;
@@ -40,5 +41,10 @@ public class JoogConfig {
     @Bean
     ItemDao getItemDao() {
         return new ItemDao(configuration());
+    }
+
+    @Bean
+    CommentDao getCommentDao() {
+        return new CommentDao(configuration());
     }
 }
