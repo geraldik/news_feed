@@ -4,6 +4,7 @@ import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
 import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
 import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
 import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
+import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.mapper.ItemMapper;
 import com.gmail.geraldik.newsfeed.page.SimplePage;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
@@ -50,13 +51,14 @@ public class ItemServiceImpl implements ItemService {
      * Find Item in DB with pagination and sorting
      */
     @Override
-    public SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort) {
+    public SimplePage<ItemShortWithCommentNum> findPaginated(
+            int page, int size, Sort sort, ItemPageFilter filter) {
         int itemsCount = repository.countAllItem();
         if (itemsCount < page * size) {
             page = itemsCount / size;
         }
         List<ItemWithCommentNum> items = repository.findAllWithLimitAndOffsetAndSort(
-                page, size, sort);
+                page, size, sort, filter);
         var shortItems = items.stream()
                 .map(mapper::toItemShortCommentNumResponse)
                 .toList();

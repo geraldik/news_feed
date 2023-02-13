@@ -34,7 +34,7 @@ public class ItemController {
 
     @PutMapping()
     public ResponseEntity<ItemShortResponse> updateItem(
-            @Valid @RequestBody ItemUpdateRequest itemUpdateRequest) {
+           @Valid @RequestBody ItemUpdateRequest itemUpdateRequest) {
         var itemShortResponse = service.update(itemUpdateRequest);
         return new ResponseEntity<>(
                 itemShortResponse,
