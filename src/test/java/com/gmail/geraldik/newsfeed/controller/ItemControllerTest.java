@@ -110,12 +110,10 @@ class ItemControllerTest {
     @Test
     public void whenCreateItemWithSameTitleThenGetException() throws Exception {
         postItem(ITEM_SAVE_REQUEST_ONE);
-        assertThrows(ServletException.class, () -> {
-            mockMvc.perform(post(ENDPOINT)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(ITEM_SAVE_REQUEST_ONE)))
-                    .andExpect(status().isBadRequest());
-        });
+        assertThrows(ServletException.class, () -> mockMvc.perform(post(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(ITEM_SAVE_REQUEST_ONE)))
+                .andExpect(status().isBadRequest()));
     }
 
     @Test
@@ -138,12 +136,10 @@ class ItemControllerTest {
     public void whenUpdateItemWithSameTitleThenGetException() throws Exception {
         postItem(ITEM_SAVE_REQUEST_ONE);
         postItem(ITEM_SAVE_REQUEST_TWO);
-        assertThrows(ServletException.class, () -> {
-            mockMvc.perform(put(ENDPOINT)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST)))
-                    .andExpect(status().isBadRequest());
-        });
+        assertThrows(ServletException.class, () -> mockMvc.perform(put(ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST)))
+                .andExpect(status().isBadRequest()));
     }
 
     private void postItem(ItemSaveRequest item) throws Exception {
@@ -224,4 +220,37 @@ class ItemControllerTest {
                 ITEM_SHORT_WITH_COMMENT_NUM_ONE));
     }
 
+    @Test
+    public void whenGetFilteredByAuthorThenOk() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        postItem(ITEM_SAVE_REQUEST_TWO);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?author=" + AUTHOR_ONE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isNotEmpty();
+        assertThat(content).isEqualTo(List.of(
+                ITEM_SHORT_WITH_COMMENT_NUM_ONE));
+    }
+    @Test
+    public void whenGetFilteredByAuthorThatNotExistThenGetEmptyList() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?author="))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isEmpty();
+    }
 }
