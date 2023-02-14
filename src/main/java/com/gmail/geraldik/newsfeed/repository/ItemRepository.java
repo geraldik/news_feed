@@ -12,8 +12,9 @@ import org.jooq.impl.DSL;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
@@ -144,10 +145,13 @@ public class ItemRepository {
                                         .eq(author)),
                         Optional.ofNullable(filter.getCreatedFrom())
                                 .map(createdFrom -> DSL.field("created")
-                                        .greaterOrEqual(new Timestamp(createdFrom))),
+                                        .greaterOrEqual(LocalDateTime.ofInstant(
+                                                Instant.ofEpochMilli(createdFrom), ZoneId.of("UTC")))),
                         Optional.ofNullable(filter.getCreatedTo())
                                 .map(createdTo -> DSL.field("created")
-                                        .lessOrEqual(new Timestamp(createdTo))))
+                                        .lessOrEqual(LocalDateTime.ofInstant(
+                                                Instant.ofEpochMilli(createdTo), ZoneId.of("UTC"))
+)))
                 .flatMap(Optional::stream)
                 .toList();
     }
