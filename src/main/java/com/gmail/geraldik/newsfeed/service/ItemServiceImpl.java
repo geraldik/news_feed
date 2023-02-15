@@ -1,9 +1,6 @@
 package com.gmail.geraldik.newsfeed.service;
 
-import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
-import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
-import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
-import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
+import com.gmail.geraldik.newsfeed.dto.*;
 import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.mapper.ItemMapper;
 import com.gmail.geraldik.newsfeed.page.SimplePage;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +61,16 @@ public class ItemServiceImpl implements ItemService {
                 .map(mapper::toItemShortCommentNumResponse)
                 .toList();
         return new SimplePage<>(shortItems, sort, itemsCount, page, size);
+    }
+
+    @Override
+    public ItemFullResponse findItem(int id) {
+        var result = repository.findItem(id);
+        if(result.isEmpty()) {
+            throw new NoSuchElementException("There is no item with this id");
+        }
+        return result.get();
+
+
     }
 }

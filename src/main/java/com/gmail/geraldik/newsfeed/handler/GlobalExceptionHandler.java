@@ -11,14 +11,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 @AllArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler {
-
-    private ObjectMapper objectMapper;
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<?> handle(MethodArgumentNotValidException e) {
@@ -44,5 +43,18 @@ public class GlobalExceptionHandler {
                     }
                 }
         );
+    }
+
+        @ExceptionHandler({NoSuchElementException.class})
+        public ResponseEntity<?> handle(NoSuchElementException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(404).body(
+                    new HashMap<>() {
+                        {
+                            put("reason", "Failed getting item");
+                            put("message", e.getMessage());
+                        }
+                    }
+            );
     }
 }
