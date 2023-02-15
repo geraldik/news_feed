@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -252,5 +253,80 @@ class ItemControllerTest {
                         });
         List<ItemShortWithCommentNum> content = response.getContent();
         assertThat(content).isEmpty();
+    }
+
+    @Test
+    public void whenGetFilteredByCreatedThenOk() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        postItem(ITEM_SAVE_REQUEST_TWO);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?createdFrom=" + (Instant.now().toEpochMilli() - 500L)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isNotEmpty();
+        assertThat(content).isEqualTo(List.of(
+                ITEM_SHORT_WITH_COMMENT_NUM_TWO,
+                ITEM_SHORT_WITH_COMMENT_NUM_ONE));
+    }
+
+    @Test
+    public void whenGetFilteredByCreatedThenGetEmptyList() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?createdFrom=" + Instant.now().toEpochMilli()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isEmpty();
+    }
+    @Test
+    public void whenGetFilteredByCreatedThenGetOne() throws Exception {
+        var fromTime = Instant.now().toEpochMilli();
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        var toTime = Instant.now().toEpochMilli();
+        postItem(ITEM_SAVE_REQUEST_TWO);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?createdFrom=" + fromTime +
+                        "&createdTo=" + toTime))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isNotEmpty();
+        assertThat(content).isEqualTo(List.of(
+                ITEM_SHORT_WITH_COMMENT_NUM_ONE));
+    }
+
+    @Test
+    public void whenGetFilteredByCommentNumThenOk() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        MvcResult result = mockMvc.perform(get(
+                        ENDPOINT + "?CommentNumFrom=0"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isNotEmpty();
+        assertThat(content).isEqualTo(List.of(
+                ITEM_SHORT_WITH_COMMENT_NUM_ONE));
     }
 }
