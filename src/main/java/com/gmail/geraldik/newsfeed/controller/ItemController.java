@@ -1,9 +1,6 @@
 package com.gmail.geraldik.newsfeed.controller;
 
-import com.gmail.geraldik.newsfeed.dto.ItemSaveRequest;
-import com.gmail.geraldik.newsfeed.dto.ItemShortResponse;
-import com.gmail.geraldik.newsfeed.dto.ItemShortWithCommentNum;
-import com.gmail.geraldik.newsfeed.dto.ItemUpdateRequest;
+import com.gmail.geraldik.newsfeed.dto.*;
 import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.page.SimplePage;
 import com.gmail.geraldik.newsfeed.service.ItemService;
@@ -34,7 +31,7 @@ public class ItemController {
 
     @PutMapping()
     public ResponseEntity<ItemShortResponse> updateItem(
-           @Valid @RequestBody ItemUpdateRequest itemUpdateRequest) {
+            @Valid @RequestBody ItemUpdateRequest itemUpdateRequest) {
         var itemShortResponse = service.update(itemUpdateRequest);
         return new ResponseEntity<>(
                 itemShortResponse,
@@ -44,13 +41,20 @@ public class ItemController {
 
     @GetMapping()
     public ResponseEntity<SimplePage<ItemShortWithCommentNum>> getItems(
-            @RequestParam (value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam (value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             Sort sort,
             ItemPageFilter filter) {
         var resultPage = service.findPaginated(page, size, sort, filter);
         return new ResponseEntity<>(
                 resultPage,
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemFullResponse> getItem(@PathVariable("id") int id) {
+        return new ResponseEntity<>(
+                service.findItem(id),
                 HttpStatus.OK);
     }
 }

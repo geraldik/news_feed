@@ -1,5 +1,6 @@
 package com.gmail.geraldik.newsfeed.repository;
 
+import com.gmail.geraldik.newsfeed.dto.ItemFullResponse;
 import com.gmail.geraldik.newsfeed.filter.ItemPageFilter;
 import com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item;
 import com.gmail.geraldik.newsfeed.pojo.ItemWithCommentNum;
@@ -90,6 +91,13 @@ public class ItemRepository {
                 .fetchInto(ItemWithCommentNum.class);
     }
 
+    public Optional<ItemFullResponse> findItem(int id) {
+        var result = dsl.fetchOne(ITEM, ITEM.ID.eq(id));
+        return result != null ?
+                Optional.of(result.into(ItemFullResponse.class)) :
+                Optional.empty();
+    }
+
     public int countAllItem() {
         return dsl.selectCount()
                 .from(ITEM)
@@ -101,6 +109,7 @@ public class ItemRepository {
      * If the `Sort` object is unsorted, the method returns a default sort list.
      * If the `Sort` object contains properties not in the allowed fields list, they are filtered out.
      * The remaining properties are sorted according to the ascending or descending order specified in the `Sort` object.
+     *
      * @param sort the `Sort` object to be converted
      * @return a list of `SortField` objects based on the given `Sort` object
      */
@@ -117,8 +126,9 @@ public class ItemRepository {
 
     /**
      * Creates a sort field based on the specified property and sort order.
+     *
      * @param isAscending Specifies the sort order. Set to `true` for ascending, and `false` for descending.
-     * @param property Specifies the property to sort by.
+     * @param property    Specifies the property to sort by.
      * @return A sort field based on the specified property and sort order.
      */
     private SortField<?> ascOrDesc(boolean isAscending, String property) {
@@ -150,7 +160,7 @@ public class ItemRepository {
                                 .map(createdTo -> DSL.field("created")
                                         .lessOrEqual(LocalDateTime.ofInstant(
                                                 Instant.ofEpochMilli(createdTo), ZoneId.of("UTC"))
-)))
+                                        )))
                 .flatMap(Optional::stream)
                 .toList();
     }

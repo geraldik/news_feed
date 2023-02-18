@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -44,6 +45,19 @@ public class GlobalExceptionHandler {
         }
             return ResponseEntity.status(404).body(
                     body
+            );
+    }
+
+        @ExceptionHandler({NoSuchElementException.class})
+        public ResponseEntity<?> handle(NoSuchElementException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(404).body(
+                    new HashMap<>() {
+                        {
+                            put("reason", "Failed getting item");
+                            put("message", e.getMessage());
+                        }
+                    }
             );
     }
 }
