@@ -1,6 +1,7 @@
 package com.gmail.geraldik.newsfeed.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private ObjectMapper objectMapper;
-
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<?> handle(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
@@ -34,15 +33,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ResponseStatusException.class})
-    public ResponseEntity<?> handle(ResponseStatusException e) {
+    public ResponseEntity<?> handle(ResponseStatusException e, HttpServletRequest request) {
         log.error(e.getMessage());
-        return ResponseEntity.status(404).body(
-                new HashMap<>() {
-                    {
-                        put("reason", e.getReason());
-                        put("message", "Failed update attempt");
-                    }
-                }
-        );
+        Map<String, String> body = new HashMap<>();
+        body.put("reason", e.getReason());
+        if (request.getMethod().equals("PUT")) {
+            body.put("message", "Failed update attempt");
+        } else if (request.getMethod().equals("GET")) {
+            body.put("message", "Failed get attempt");
+        }
+            return ResponseEntity.status(404).body(
+                    body
+            );
     }
 }

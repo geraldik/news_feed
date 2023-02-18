@@ -59,7 +59,6 @@ public class ItemRepository {
     }
 
     public boolean updateOne(Item item) {
-        System.out.println(dsl.configuration().dialect().getName());
         return dsl.update(ITEM)
                 .set(ITEM.TITLE, item.getTitle())
                 .set(ITEM.BODY, item.getBody())
