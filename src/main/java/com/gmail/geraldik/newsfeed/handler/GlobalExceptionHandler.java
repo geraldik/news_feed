@@ -1,6 +1,5 @@
 package com.gmail.geraldik.newsfeed.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +37,10 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage());
         Map<String, String> body = new HashMap<>();
         body.put("reason", e.getReason());
-        if (request.getMethod().equals("PUT")) {
+        var method = request.getMethod();
+        if (method.equals("PUT")) {
             body.put("message", "Failed update attempt");
-        } else if (request.getMethod().equals("GET")) {
+        } else if (method.equals("GET")) {
             body.put("message", "Failed get attempt");
         }
             return ResponseEntity.status(404).body(
