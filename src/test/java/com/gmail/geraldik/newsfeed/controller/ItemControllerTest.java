@@ -239,6 +239,7 @@ class ItemControllerTest {
         assertThat(content).isEqualTo(List.of(
                 ITEM_SHORT_WITH_COMMENT_NUM_ONE));
     }
+
     @Test
     public void whenGetFilteredByAuthorThatNotExistThenGetEmptyList() throws Exception {
         postItem(ITEM_SAVE_REQUEST_ONE);
@@ -290,6 +291,7 @@ class ItemControllerTest {
         List<ItemShortWithCommentNum> content = response.getContent();
         assertThat(content).isEmpty();
     }
+
     @Test
     public void whenGetFilteredByCreatedThenGetOne() throws Exception {
         var fromTime = Instant.now().toEpochMilli();
@@ -297,8 +299,8 @@ class ItemControllerTest {
         var toTime = Instant.now().toEpochMilli();
         postItem(ITEM_SAVE_REQUEST_TWO);
         MvcResult result = mockMvc.perform(get(
-                        ENDPOINT + "?createdFrom=" + fromTime +
-                        "&createdTo=" + toTime))
+                        ENDPOINT + "?createdFrom=" + fromTime
+                                + "&createdTo=" + toTime))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
