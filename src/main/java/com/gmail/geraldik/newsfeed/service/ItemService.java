@@ -17,5 +17,5 @@ public interface ItemService {
 
     SimplePage<ItemShortWithCommentNum> findPaginated(int page, int size, Sort sort, ItemPageFilter filter);
 
-    ItemFullResponse findItem(int id);
+    ItemFullResponse findItem(int itemId);
 }

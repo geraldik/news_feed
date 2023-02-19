@@ -64,13 +64,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemFullResponse findItem(int id) {
-        var result = repository.findItem(id);
-        if(result.isEmpty()) {
+    public ItemFullResponse findItem(int itemId) {
+        var result = repository.findItem(itemId);
+        if (result.isEmpty()) {
             throw new NoSuchElementException("There is no item with this id");
         }
         return result.get();
-
-
     }
 }
