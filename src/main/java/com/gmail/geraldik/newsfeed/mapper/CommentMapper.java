@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommentMapper {
 
+    private static final int LENGTH_SHORT_COMMENT = 50;
+
     /**
      * Convert entering comment to be saved to a POJO version
      */
@@ -36,7 +38,8 @@ public class CommentMapper {
      * Cutting text of comment to a short version
      */
     private String cutTheBody(String body) {
-        return body.length() > 50 ? body.substring(0, 50) : body;
+        return body.length() > LENGTH_SHORT_COMMENT
+                ? body.substring(0, LENGTH_SHORT_COMMENT) : body;
     }
 
     /**
