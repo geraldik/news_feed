@@ -91,11 +91,11 @@ public class ItemRepository {
                 .fetchInto(ItemWithCommentNum.class);
     }
 
-    public Optional<ItemFullResponse> findItem(int id) {
-        var result = dsl.fetchOne(ITEM, ITEM.ID.eq(id));
-        return result != null ?
-                Optional.of(result.into(ItemFullResponse.class)) :
-                Optional.empty();
+    public Optional<ItemFullResponse> findItem(int itemId) {
+        var result = dsl.fetchOne(ITEM, ITEM.ID.eq(itemId));
+        return result != null
+                ? Optional.of(result.into(ItemFullResponse.class))
+                : Optional.empty();
     }
 
     public int countAllItem() {
