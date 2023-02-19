@@ -13,16 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(UriConsts.API + UriConsts.NEWS)
+@RequestMapping(UriConsts.API + UriConsts.COMMENTS)
 public class CommentController {
 
     private final CommentService service;
 
-    @PostMapping(UriConsts.COMMENTS)
+    @PostMapping()
     public ResponseEntity<CommentShortResponse> createComment(
             @Valid @RequestBody CommentSaveRequest commentSaveRequest) {
         var commentShortResponse = service.save(commentSaveRequest);
@@ -32,7 +30,7 @@ public class CommentController {
         );
     }
 
-    @PutMapping(UriConsts.COMMENTS)
+    @PutMapping()
     public ResponseEntity<CommentShortResponse> updateComment(
             @Valid @RequestBody CommentUpdateRequest commentUpdateRequest) {
         var commentShortResponse = service.update(commentUpdateRequest);
@@ -42,24 +40,14 @@ public class CommentController {
         );
     }
 
-    @DeleteMapping(UriConsts.COMMENTS + "/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable("commentId") int commentId) {
         service.delete(commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{itemId}" + UriConsts.COMMENTS)
-    public ResponseEntity<List<CommentFullResponse>> getComments(
-            @PathVariable("itemId") int itemId) {
-        var comments = service.findAllForItem(itemId);
-        return new ResponseEntity<>(
-                comments,
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping(UriConsts.COMMENTS + "/{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<CommentFullResponse> getComment(
             @PathVariable("commentId") int commentId) {
         var comment = service.findOne(commentId);
