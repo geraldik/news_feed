@@ -3,8 +3,10 @@ package com.gmail.geraldik.newsfeed.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class CommentSaveRequest {
 
     @NotNull(message = "The name of commentator must be not null")
