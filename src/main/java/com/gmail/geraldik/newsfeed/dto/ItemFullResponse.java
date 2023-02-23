@@ -12,4 +12,5 @@ public class    ItemFullResponse {
     private String title;
     private String body;
     private String author;
+    private boolean disable;
 }

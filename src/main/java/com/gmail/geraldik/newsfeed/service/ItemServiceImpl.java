@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemsCount < page * size) {
             page = itemsCount / size;
         }
-        List<ItemWithCommentNum> items = repository.findAllWithLimitAndOffsetAndSort(
+        List<ItemWithCommentNum> items = repository.findAllWithLimitAndOffsetAndSortIsNotDisabled(
                 page, size, sort, filter);
         var shortItems = items.stream()
                 .map(mapper::toItemShortCommentNumResponse)

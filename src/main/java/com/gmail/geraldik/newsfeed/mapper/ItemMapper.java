@@ -41,7 +41,8 @@ public class ItemMapper {
                 .setId(itemUpdateRequest.getId())
                 .setTitle(itemUpdateRequest.getTitle())
                 .setBody(cutTheBody(itemUpdateRequest.getBody()))
-                .setAuthor(itemUpdateRequest.getAuthor());
+                .setAuthor(itemUpdateRequest.getAuthor())
+                .setDisable(itemUpdateRequest.isDisable());
     }
 
     /**
@@ -64,7 +65,8 @@ public class ItemMapper {
                 .setId(itemUpdateRequest.getId())
                 .setTitle(itemUpdateRequest.getTitle())
                 .setBody(itemUpdateRequest.getBody())
-                .setAuthor(itemUpdateRequest.getAuthor());
+                .setAuthor(itemUpdateRequest.getAuthor())
+                .setDisable(itemUpdateRequest.isDisable());
     }
 
     /**

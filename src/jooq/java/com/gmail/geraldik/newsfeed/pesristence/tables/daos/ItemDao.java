@@ -122,4 +122,18 @@ public class ItemDao extends DAOImpl<ItemRecord, com.gmail.geraldik.newsfeed.pes
     public List<com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item> fetchByCreated(LocalDateTime... values) {
         return fetch(Item.ITEM.CREATED, values);
     }
+
+    /**
+     * Fetch records that have <code>disable BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item> fetchRangeOfDisable(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(Item.ITEM.DISABLE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>disable IN (values)</code>
+     */
+    public List<com.gmail.geraldik.newsfeed.pesristence.tables.pojos.Item> fetchByDisable(Boolean... values) {
+        return fetch(Item.ITEM.DISABLE, values);
+    }
 }
