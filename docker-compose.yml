@@ -1,13 +1,38 @@
-version: "3.9"
+version: "3.8"
+
 services:
-  db:
+  db_test:
     image: postgres
-    container_name: db
+    container_name: db_test
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=testDB
-      - PGDATA=/var/lib/postgresql/data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: testDB
     ports:
       - "127.0.0.1:5431:5432"
-    restart: always
+
+  db_app:
+    image: postgres
+    container_name: db_app
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: newsfeed
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./db/newsfeed/data:/var/lib/postgresql/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: newsfeed
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_app:5432/newsfeed
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - db_app
+      - db_test
