@@ -20,5 +20,6 @@ public class ItemUpdateRequest {
     @NotEmpty(message = "The body should not be empty")
     private final String body;
     private final String author;
+    private final boolean disable;
 
 }

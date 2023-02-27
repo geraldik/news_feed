@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record5;
-import org.jooq.Row5;
+import org.jooq.Record6;
+import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Created news
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Record5<Integer, String, String, String, LocalDateTime> {
+public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Record6<Integer, String, String, String, LocalDateTime, Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -98,6 +98,21 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
         return (LocalDateTime) get(4);
     }
 
+    /**
+     * Setter for <code>public.item.disable</code>. Mark news for disabling
+     */
+    public ItemRecord setDisable(Boolean value) {
+        set(5, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.item.disable</code>. Mark news for disabling
+     */
+    public Boolean getDisable() {
+        return (Boolean) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -108,17 +123,17 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     // -------------------------------------------------------------------------
-    // Record5 type implementation
+    // Record6 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Integer, String, String, String, LocalDateTime, Boolean> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 
     @Override
-    public Row5<Integer, String, String, String, LocalDateTime> valuesRow() {
-        return (Row5) super.valuesRow();
+    public Row6<Integer, String, String, String, LocalDateTime, Boolean> valuesRow() {
+        return (Row6) super.valuesRow();
     }
 
     @Override
@@ -147,6 +162,11 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     @Override
+    public Field<Boolean> field6() {
+        return Item.ITEM.DISABLE;
+    }
+
+    @Override
     public Integer component1() {
         return getId();
     }
@@ -172,6 +192,11 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     @Override
+    public Boolean component6() {
+        return getDisable();
+    }
+
+    @Override
     public Integer value1() {
         return getId();
     }
@@ -194,6 +219,11 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     @Override
     public LocalDateTime value5() {
         return getCreated();
+    }
+
+    @Override
+    public Boolean value6() {
+        return getDisable();
     }
 
     @Override
@@ -227,12 +257,19 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     }
 
     @Override
-    public ItemRecord values(Integer value1, String value2, String value3, String value4, LocalDateTime value5) {
+    public ItemRecord value6(Boolean value) {
+        setDisable(value);
+        return this;
+    }
+
+    @Override
+    public ItemRecord values(Integer value1, String value2, String value3, String value4, LocalDateTime value5, Boolean value6) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
+        value6(value6);
         return this;
     }
 
@@ -250,7 +287,7 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
     /**
      * Create a detached, initialised ItemRecord
      */
-    public ItemRecord(Integer id, String title, String body, String author, LocalDateTime created) {
+    public ItemRecord(Integer id, String title, String body, String author, LocalDateTime created, Boolean disable) {
         super(Item.ITEM);
 
         setId(id);
@@ -258,5 +295,6 @@ public class ItemRecord extends UpdatableRecordImpl<ItemRecord> implements Recor
         setBody(body);
         setAuthor(author);
         setCreated(created);
+        setDisable(disable);
     }
 }

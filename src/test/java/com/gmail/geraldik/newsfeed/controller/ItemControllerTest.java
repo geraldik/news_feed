@@ -51,9 +51,12 @@ class ItemControllerTest {
             new ItemShortWithCommentNum();
     private static final ItemShortWithCommentNum ITEM_SHORT_WITH_COMMENT_NUM_TWO =
             new ItemShortWithCommentNum();
-    public static final ItemUpdateRequest ITEM_UPDATE_REQUEST =
+    public static final ItemUpdateRequest ITEM_UPDATE_REQUEST_DISABLE_FALSE =
 
-            new ItemUpdateRequest(ID_1, TITLE_TWO, BODY_TWO, AUTHOR_TWO);
+            new ItemUpdateRequest(ID_1, TITLE_TWO, BODY_TWO, AUTHOR_TWO, false);
+    public static final ItemUpdateRequest ITEM_UPDATE_REQUEST_DISABLE_TRUE =
+
+            new ItemUpdateRequest(ID_1, TITLE_TWO, BODY_TWO, AUTHOR_TWO, true);
     private static final String COMMENTATOR = "commentator";
     @Autowired
     private MockMvc mockMvc;
@@ -77,7 +80,8 @@ class ItemControllerTest {
                 .setId(ID_1)
                 .setTitle(TITLE_ONE)
                 .setBody(BODY_ONE)
-                .setAuthor(AUTHOR_ONE);
+                .setAuthor(AUTHOR_ONE)
+                .setDisable(false);
         ITEM_SHORT_WITH_COMMENT_NUM_ONE
                 .setId(ID_1)
                 .setTitle(TITLE_ONE)
@@ -127,7 +131,24 @@ class ItemControllerTest {
         postItem(ITEM_SAVE_REQUEST_ONE);
         mockMvc.perform(put(ENDPOINT_NEWS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST)))
+                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST_DISABLE_FALSE)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").value(itemShortResponse));
+    }
+
+    @Test
+    public void whenUpdateItemSetDisableTrueThenOk() throws Exception {
+        ItemShortResponse itemShortResponse = new ItemShortResponse();
+        itemShortResponse.setId(ID_1)
+                .setTitle(TITLE_TWO)
+                .setBody(BODY_TWO)
+                .setAuthor(AUTHOR_TWO)
+                .setDisable(true);
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        mockMvc.perform(put(ENDPOINT_NEWS)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST_DISABLE_TRUE)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").value(itemShortResponse));
@@ -139,7 +160,7 @@ class ItemControllerTest {
         postItem(ITEM_SAVE_REQUEST_TWO);
         assertThrows(ServletException.class, () -> mockMvc.perform(put(ENDPOINT_NEWS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST)))
+                        .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST_DISABLE_FALSE)))
                 .andExpect(status().isBadRequest()));
     }
 
@@ -158,6 +179,24 @@ class ItemControllerTest {
         List<ItemShortWithCommentNum> content = response.getContent();
         assertThat(content).isEqualTo(List.of(
                 ITEM_SHORT_WITH_COMMENT_NUM_TWO, ITEM_SHORT_WITH_COMMENT_NUM_ONE));
+    }
+
+    @Test
+    public void whenGetAfterUpdateSetDisableTrueThanEmptyList() throws Exception {
+        postItem(ITEM_SAVE_REQUEST_ONE);
+        mockMvc.perform(put(ENDPOINT_NEWS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ITEM_UPDATE_REQUEST_DISABLE_TRUE)));
+        MvcResult result = mockMvc.perform(get(ENDPOINT_NEWS))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        SimplePage<ItemShortWithCommentNum> response =
+                objectMapper.readValue(result.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+        List<ItemShortWithCommentNum> content = response.getContent();
+        assertThat(content).isEmpty();
     }
 
     @Test

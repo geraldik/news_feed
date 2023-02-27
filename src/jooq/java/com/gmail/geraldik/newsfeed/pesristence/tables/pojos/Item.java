@@ -21,6 +21,7 @@ public class Item implements Serializable {
     private String        body;
     private String        author;
     private LocalDateTime created;
+    private Boolean       disable;
 
     public Item() {}
 
@@ -30,6 +31,7 @@ public class Item implements Serializable {
         this.body = value.body;
         this.author = value.author;
         this.created = value.created;
+        this.disable = value.disable;
     }
 
     public Item(
@@ -37,13 +39,15 @@ public class Item implements Serializable {
         String        title,
         String        body,
         String        author,
-        LocalDateTime created
+        LocalDateTime created,
+        Boolean       disable
     ) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.author = author;
         this.created = created;
+        this.disable = disable;
     }
 
     /**
@@ -121,6 +125,21 @@ public class Item implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.item.disable</code>. Mark news for disabling
+     */
+    public Boolean getDisable() {
+        return this.disable;
+    }
+
+    /**
+     * Setter for <code>public.item.disable</code>. Mark news for disabling
+     */
+    public Item setDisable(Boolean disable) {
+        this.disable = disable;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -160,6 +179,12 @@ public class Item implements Serializable {
         }
         else if (!created.equals(other.created))
             return false;
+        if (disable == null) {
+            if (other.disable != null)
+                return false;
+        }
+        else if (!disable.equals(other.disable))
+            return false;
         return true;
     }
 
@@ -172,6 +197,7 @@ public class Item implements Serializable {
         result = prime * result + ((this.body == null) ? 0 : this.body.hashCode());
         result = prime * result + ((this.author == null) ? 0 : this.author.hashCode());
         result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
+        result = prime * result + ((this.disable == null) ? 0 : this.disable.hashCode());
         return result;
     }
 
@@ -184,6 +210,7 @@ public class Item implements Serializable {
         sb.append(", ").append(body);
         sb.append(", ").append(author);
         sb.append(", ").append(created);
+        sb.append(", ").append(disable);
 
         sb.append(")");
         return sb.toString();

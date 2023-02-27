@@ -1,10 +1,11 @@
 CREATE TABLE IF NOT EXISTS item
 (
-    id      SERIAL PRIMARY KEY,
-    title   TEXT      NOT NULL UNIQUE,
-    body    TEXT      NOT NULL,
-    author  TEXT      NOT NULL,
-    created TIMESTAMP NOT NULL
+    id         SERIAL PRIMARY KEY,
+    title      TEXT      NOT NULL UNIQUE,
+    body       TEXT      NOT NULL,
+    author     TEXT      NOT NULL,
+    created    TIMESTAMP NOT NULL,
+    disable BOOLEAN default FALSE
 
 );
 
@@ -30,3 +31,4 @@ comment on column item.title is 'Title of the news ';
 comment on column item.body is 'News text';
 comment on column item.author is 'News author';
 comment on column item.created is 'News creation date (UTC+0)';
+comment on column item.disable is 'Mark news for disabling';

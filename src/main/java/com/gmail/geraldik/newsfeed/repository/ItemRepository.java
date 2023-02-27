@@ -65,11 +65,12 @@ public class ItemRepository {
                 .set(ITEM.BODY, item.getBody())
                 .set(ITEM.AUTHOR, item.getAuthor())
                 .set(ITEM.CREATED, LocalDateTime.now(ZoneOffset.UTC))
+                .set(ITEM.DISABLE, item.getDisable())
                 .where(ITEM.ID.eq(item.getId()))
                 .execute() > 0;
     }
 
-    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSort(
+    public List<ItemWithCommentNum> findAllWithLimitAndOffsetAndSortIsNotDisabled(
             int page, int size, Sort sort, ItemPageFilter filter) {
         List<Condition> whereConditions = forWhereClause(filter);
         List<Condition> havingConditions = forHavingClause(filter);
@@ -83,6 +84,7 @@ public class ItemRepository {
                 .from(ITEM.leftJoin(COMMENT)
                         .on(ITEM.ID.eq(COMMENT.ITEM_ID)))
                 .where(whereConditions)
+                .and(ITEM.DISABLE.eq(false))
                 .groupBy(ITEM.ID)
                 .having(havingConditions)
                 .orderBy(sortFields)

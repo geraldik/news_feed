@@ -17,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -73,6 +73,11 @@ public class Item extends TableImpl<ItemRecord> {
      * The column <code>public.item.created</code>. News creation date (UTC+0)
      */
     public final TableField<ItemRecord, LocalDateTime> CREATED = createField(DSL.name("created"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "News creation date (UTC+0)");
+
+    /**
+     * The column <code>public.item.disable</code>. Mark news for disabling
+     */
+    public final TableField<ItemRecord, Boolean> DISABLE = createField(DSL.name("disable"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Mark news for disabling");
 
     private Item(Name alias, Table<ItemRecord> aliased) {
         this(alias, aliased, null);
@@ -154,11 +159,11 @@ public class Item extends TableImpl<ItemRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<Integer, String, String, String, LocalDateTime, Boolean> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }
