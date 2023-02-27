@@ -1,9 +1,9 @@
-# News Engine API
+# News Feed Engine app
 ***
 
 This is the REST API for the News Engine app. It allows users to access news articles and  comments.
 
-> **Using stack**: _Java 17, Spring boot 3, Jooq 8.1, Postgres 14, Lombok, Flyway 9.5.1_
+> **Used stack**: _Java 17, Spring boot 3, Jooq 8.1, Postgres 14, Lombok, Flyway 9.5.1_
 
 ***
 **Required elements:**
